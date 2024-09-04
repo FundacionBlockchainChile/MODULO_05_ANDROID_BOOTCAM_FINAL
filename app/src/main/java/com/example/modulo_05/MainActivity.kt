@@ -50,6 +50,10 @@ fun UsuarioApp(modifier: Modifier = Modifier) {
     println("\nLista de usuarios después de eliminar a Walter White:")
     usuarioManager.mostrarLista()
 
+    val usuariosFiltrados = usuarioManager.filtrarUsuariosPorEdad(30)
+    println("\nLista de usuarios mayores de 30 años:")
+    usuariosFiltrados.forEach { println("${it.nombre}, ${it.edad} años") }
+
     Column(modifier = modifier.padding(16.dp)) {
         Text(text = "Usuarios:")
         usuarioManager.mostrarLista()

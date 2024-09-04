@@ -14,4 +14,8 @@ class UsuarioManager {
     fun mostrarLista() {
         usuarios.forEach { it.mostrarDatos() }
     }
+
+    fun filtrarUsuariosPorEdad(edad: Int): List<Usuario> {
+        return usuarios.filter { it.edad > edad }
+    }
 }
