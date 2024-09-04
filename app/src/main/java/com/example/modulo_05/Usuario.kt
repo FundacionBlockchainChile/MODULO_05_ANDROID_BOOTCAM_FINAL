@@ -20,15 +20,4 @@ class Usuario(
             println("No hay referencia citada.")
         }
     }
-
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val usuario1 = Usuario("Rick Grimes", 45, "Sheriff", null)
-            val usuario2 = Usuario("Walter White", 60, null, usuario1)
-            usuario1.mostrarDatos()
-            println()
-            usuario2.mostrarDatos()
-        }
-    }
 }

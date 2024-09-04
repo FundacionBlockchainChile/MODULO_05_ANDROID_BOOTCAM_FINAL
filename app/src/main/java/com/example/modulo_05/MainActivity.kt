@@ -35,13 +35,24 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun UsuarioApp(modifier: Modifier = Modifier) {
-    val usuario1 = Usuario("Rick Grimes", 45, "Sheriff", null)
-    val usuario2 = Usuario("Walter White", 60, null, usuario1)
+    val usuarioManager = UsuarioManager()
+    usuarioManager.agregarUsuario(Usuario("Rick Grimes", 45, "Sheriff", null))
+    usuarioManager.agregarUsuario(Usuario("Walter White", 60, null, null))
+    usuarioManager.agregarUsuario(Usuario("Jesse Pinkman", 25, "Cocinero", null))
+    usuarioManager.agregarUsuario(Usuario("Saul Goodman", 50, "Abogado", null))
+    usuarioManager.agregarUsuario(Usuario("Gus Fring", 55, "Empresario", null))
+
+    println("Lista de usuarios inicial:")
+    usuarioManager.mostrarLista()
+
+    usuarioManager.eliminarUsuario("Walter White")
+
+    println("\nLista de usuarios después de eliminar a Walter White:")
+    usuarioManager.mostrarLista()
 
     Column(modifier = modifier.padding(16.dp)) {
         Text(text = "Usuarios:")
-        UsuarioView(usuario = usuario1)
-        UsuarioView(usuario = usuario2)
+        usuarioManager.mostrarLista()
     }
 }
 
