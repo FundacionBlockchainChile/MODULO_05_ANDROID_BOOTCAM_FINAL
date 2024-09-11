@@ -1,11 +1,13 @@
 package com.example.modulo_05.view
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.modulo_05.ui.components.MultiButtonSegmented
@@ -18,6 +20,7 @@ fun HomeView(viewModel: IMCViewModel = viewModel()) {
     val age by viewModel.age.observeAsState("")
     val height by viewModel.height.observeAsState("")
     val weight by viewModel.weight.observeAsState("")
+    val errorMessage by viewModel.errorMessage.observeAsState()
 
     Column(
         modifier = Modifier
@@ -39,6 +42,7 @@ fun HomeView(viewModel: IMCViewModel = viewModel()) {
             value = age,
             onValueChange = { viewModel.setAge(it) },
             label = { Text("Edad") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -46,6 +50,7 @@ fun HomeView(viewModel: IMCViewModel = viewModel()) {
             value = height,
             onValueChange = { viewModel.setHeight(it) },
             label = { Text("Altura (cm)") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -53,6 +58,7 @@ fun HomeView(viewModel: IMCViewModel = viewModel()) {
             value = weight,
             onValueChange = { viewModel.setWeight(it) },
             label = { Text("Peso (kg)") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -64,5 +70,18 @@ fun HomeView(viewModel: IMCViewModel = viewModel()) {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text("Resultado IMC: $imcResult", style = MaterialTheme.typography.bodyLarge)
+
+        errorMessage?.let {
+            Snackbar(
+                action = {
+                    Button(onClick = { /* Dismiss action */ }) {
+                        Text("OK")
+                    }
+                },
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Text(it)
+            }
+        }
     }
 }

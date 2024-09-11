@@ -20,6 +20,9 @@ class IMCViewModel : ViewModel() {
     private val _weight = MutableLiveData("")
     val weight: LiveData<String> get() = _weight
 
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> get() = _errorMessage
+
     fun setGender(value: String) {
         _gender.value = value
     }
@@ -37,9 +40,15 @@ class IMCViewModel : ViewModel() {
     }
 
     fun calcularIMC() {
+        _imcResult.value = ""
         val pesoKg = _weight.value?.toFloatOrNull() ?: 0f
         val alturaM = (_height.value?.toFloatOrNull() ?: 0f) / 100
+        if (pesoKg == null || alturaM == null || pesoKg <= 0 || alturaM <= 0) {
+            _errorMessage.value = "Por favor, ingrese datos válidos."
+            return
+        }
         val imc = pesoKg / (alturaM * alturaM)
         _imcResult.value = "%.1f".format(imc)
+        _errorMessage.value = null
     }
 }
