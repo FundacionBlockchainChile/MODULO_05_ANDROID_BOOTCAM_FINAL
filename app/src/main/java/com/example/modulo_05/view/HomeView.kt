@@ -10,11 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.modulo_05.ui.components.MultiButtonSegmented
 import com.example.modulo_05.viewModel.IMCViewModel
 
 @Composable
-fun HomeView(viewModel: IMCViewModel = viewModel()) {
+fun HomeView(navController: NavController, viewModel: IMCViewModel = viewModel()) {
     val imcResult by viewModel.imcResult.observeAsState("")
     val gender by viewModel.gender.observeAsState("Hombre")
     val age by viewModel.age.observeAsState("")
@@ -29,6 +30,13 @@ fun HomeView(viewModel: IMCViewModel = viewModel()) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Button(
+            onClick = { navController.navigate("patientList") },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Ir a lista de pacientes")
+        }
+        Spacer(modifier = Modifier.height(32.dp))
         Text("Calculadora de IMC", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
         MultiButtonSegmented(
