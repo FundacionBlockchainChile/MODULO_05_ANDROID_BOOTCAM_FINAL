@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -13,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +38,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     var isImageVisible by remember { mutableStateOf(false) }
-    var buttonText by remember { mutableStateOf("Mostrar Imagen") }
+    var buttonText by remember { mutableStateOf("Mostrar Imágenes") }
+
+    // Lista de imágenes
+    val imageList = listOf(
+        R.drawable.profile_image03,
+        R.drawable.profile_image04,
+        R.drawable.profile_image05
+    )
 
     Column(
         modifier = modifier
@@ -49,16 +59,24 @@ fun MainScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
             isImageVisible = !isImageVisible
-            buttonText = if (isImageVisible) "Ocultar Imagen" else "Mostrar Imagen"
+            buttonText = if (isImageVisible) "Ocultar Imágenes" else "Mostrar Imágenes"
         }) {
             Text(buttonText)
         }
-        Spacer(modifier = Modifier.height(16.dp))
         if (isImageVisible) {
-            Image(
-                painter = painterResource(id = R.drawable.profile_image),
-                contentDescription = "Imagen de ejemplo"
-            )
+            LazyColumn {
+                items(imageList) { imageRes ->
+                    Image(
+                        painter = painterResource(id = imageRes),
+                        contentDescription = "Imagen de ejemplo",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)  // You can adjust the height as needed
+                            .padding(8.dp),
+                        contentScale = ContentScale.Crop  // Ensures the image fits within the defined dimensions
+                    )
+                }
+            }
         }
     }
 }
@@ -74,7 +92,7 @@ fun WelcomeText() {
 @Composable
 fun NameText() {
     Text(
-        text = "Tu Nombre",
+        text = "Sergio",
         style = MaterialTheme.typography.titleMedium
     )
 }
