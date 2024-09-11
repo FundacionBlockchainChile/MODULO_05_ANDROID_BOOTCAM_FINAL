@@ -1,4 +1,4 @@
-package com.example.modulo_05
+package com.example.modulo_05.model
 
 class Usuario(
     val nombre: String,
