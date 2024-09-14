@@ -43,6 +43,8 @@ fun HomeView(navController: NavController, viewModel: AppViewModel = viewModel()
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(text = "Calculadora de IMC", style = MaterialTheme.typography.headlineLarge)
+        Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Registrando datos para: $patientName", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
