@@ -1,5 +1,6 @@
 package com.example.modulo_05.view
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,19 +10,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.modulo_05.viewModel.PatientViewModel
+import com.example.modulo_05.viewModel.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientListView(navController: NavController, viewModel: PatientViewModel = viewModel()) {
-    val patients by viewModel.patients.observeAsState(emptyList())
+fun PatientListView(navController: NavController, viewModel: AppViewModel) {
+    val patients by viewModel.patients.collectAsState()
     val showDialog = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -40,32 +40,48 @@ fun PatientListView(navController: NavController, viewModel: PatientViewModel = 
                 Icon(Icons.Default.Add, contentDescription = "Agregar Paciente")
             }
         }
-    ) {
-        LazyColumn(modifier = Modifier.padding(it)) {
-            items(patients) { patient ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .border(1.dp, Color(0xFF2D3748), RoundedCornerShape(10.dp)), // Borde redondeado
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Row(
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f) // Permite que la lista ocupe todo el espacio disponible
+                    .padding(16.dp)
+            ) {
+                items(patients) { patient ->
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                            .padding(8.dp)
+                            .border(1.dp, Color(0xFF2D3748), RoundedCornerShape(10.dp)),
+                        shape = RoundedCornerShape(10.dp)
                     ) {
-                        Text(
-                            text = "Nombre: ${patient.name}",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        Button(
-                            onClick = { navController.navigate("home") },
-                            modifier = Modifier.wrapContentWidth(),
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.SpaceBetween,
+                            horizontalAlignment = Alignment.Start
                         ) {
-                            Text("Calcular IMC")
+                            Text(text = "Nombre: ${patient.name}", style = MaterialTheme.typography.bodyLarge)
+                            Text(text = "Edad: ${patient.age}", style = MaterialTheme.typography.bodyLarge)
+                            Text(text = "Género: ${patient.gender}", style = MaterialTheme.typography.bodyLarge)
+                            if (patient.imc.isEmpty()) {
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                    Button(
+                                        onClick = { navController.navigate("home/${patient.name}") },
+                                        modifier = Modifier.wrapContentWidth()
+                                    ) {
+                                        Text("Calcular IMC")
+                                    }
+                                }
+                            } else {
+                                Text(text = "IMC: ${patient.imc}", style = MaterialTheme.typography.bodyLarge)
+                                Text(text = "Estado de salud: ${patient.healthStatus}", style = MaterialTheme.typography.bodyLarge)
+                            }
                         }
                     }
                 }
@@ -81,10 +97,11 @@ fun PatientListView(navController: NavController, viewModel: PatientViewModel = 
     }
 }
 
+
+
 @Composable
 fun AddPatientDialog(onDismiss: () -> Unit, onAdd: (String) -> Unit) {
     var name by remember { mutableStateOf("") }
-
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Agregar Paciente") },
