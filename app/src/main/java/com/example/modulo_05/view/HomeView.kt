@@ -100,7 +100,6 @@ fun HomeView(navController: NavController, viewModel: AppViewModel = viewModel()
         if (showSaveButton && isInputValid) {
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
-                viewModel.addPatient(patientName)
                 viewModel.updatePatientData(patientName, age, gender = "Hombre", imcResult, healthStatus)
                 navController.navigate("patientList")
             }) {

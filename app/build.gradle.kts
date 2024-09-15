@@ -70,4 +70,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+    implementation("com.airbnb.android:lottie-compose:5.0.3") // Ejemplo de Lottie
+    implementation("androidx.navigation:navigation-compose:2.5.3") // Navigation Compose
+    implementation("androidx.datastore:datastore-preferences:1.0.0") // DataStore Preferences
+    implementation(kotlin("script-runtime"))
+    implementation("com.airbnb.android:lottie-compose:5.2.0")
 }
